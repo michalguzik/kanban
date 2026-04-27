@@ -11,7 +11,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
-
 # ── Models ──
 class Project(db.Model):
     id       = db.Column(db.String(36), primary_key=True, default=lambda: "p" + str(uuid.uuid4())[:8])
