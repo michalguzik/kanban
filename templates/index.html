@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="shortcut icon" href="/static/img/favicon.ico">
+  
+
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="logo">⬡ FLOW</span>
+        <span class="logo-sub">BOARD</span>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-label">PROJECTS</div>
+        <div id="project-list"></div>
+        <button class="add-project-btn" id="add-project-btn">+ New Project</button>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="stats" id="stats"></div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="main-header">
+        <div class="header-left">
+          <h1 id="current-project-name">All Projects</h1>
+          <span id="task-count" class="task-count"></span>
+        </div>
+        <div class="header-right">
+          <div class="filter-bar">
+            <button class="filter-btn active" data-priority="all">All</button>
+            <button class="filter-btn" data-priority="high">🔴 High</button>
+            <button class="filter-btn" data-priority="medium">🟡 Med</button>
+            <button class="filter-btn" data-priority="low">🟢 Low</button>
+          </div>
+          <button class="new-task-btn" id="new-task-btn">+ Task</button>
+        </div>
+      </header>
+
+      <div class="board" id="board">
+        <div class="column" data-status="todo">
+          <div class="column-header">
+            <span class="column-dot dot-todo"></span>
+            <span class="column-title">TO DO</span>
+            <span class="column-count" id="count-todo">0</span>
+          </div>
+          <div class="task-list" id="list-todo" data-status="todo"></div>
+        </div>
+        <div class="column" data-status="in_progress">
+          <div class="column-header">
+            <span class="column-dot dot-progress"></span>
+            <span class="column-title">IN PROGRESS</span>
+            <span class="column-count" id="count-in_progress">0</span>
+          </div>
+          <div class="task-list" id="list-in_progress" data-status="in_progress"></div>
+        </div>
+        <div class="column" data-status="done">
+          <div class="column-header">
+            <span class="column-dot dot-done"></span>
+            <span class="column-title">DONE</span>
+            <span class="column-count" id="count-done">0</span>
+          </div>
+          <div class="task-list" id="list-done" data-status="done"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h2 id="modal-title">New Task</h2>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label>Title</label>
+          <input type="text" id="task-title" placeholder="What needs to be done?">
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea id="task-desc" placeholder="Add details..." rows="3"></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Project</label>
+            <select id="task-project"></select>
+          </div>
+          <div class="field">
+            <label>Priority</label>
+            <select id="task-priority">
+              <option value="high">🔴 High</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="low">🟢 Low</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="task-status">
+              <option value="todo">To Do</option>
+              <option value="in_progress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="modal-cancel">Cancel</button>
+        <button class="btn-save" id="modal-save">Save Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Modal -->
+  <div class="modal-overlay" id="project-modal-overlay">
+    <div class="modal modal-sm" id="project-modal">
+      <div class="modal-header">
+        <h2>New Project</h2>
+        <button class="modal-close" id="project-modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label>Project Name</label>
+          <input type="text" id="project-name" placeholder="e.g. Brand Refresh">
+        </div>
+        <div class="field">
+          <label>Color</label>
+          <div class="color-picker" id="color-picker">
+            <div class="color-swatch active" data-color="#ff6b6b" style="background:#ff6b6b"></div>
+            <div class="color-swatch" data-color="#4ecdc4" style="background:#4ecdc4"></div>
+            <div class="color-swatch" data-color="#ffe66d" style="background:#ffe66d"></div>
+            <div class="color-swatch" data-color="#a29bfe" style="background:#a29bfe"></div>
+            <div class="color-swatch" data-color="#fd79a8" style="background:#fd79a8"></div>
+            <div class="color-swatch" data-color="#74b9ff" style="background:#74b9ff"></div>
+            <div class="color-swatch" data-color="#55efc4" style="background:#55efc4"></div>
+            <div class="color-swatch" data-color="#fdcb6e" style="background:#fdcb6e"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="project-modal-cancel">Cancel</button>
+        <button class="btn-save" id="project-modal-save">Create Project</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
